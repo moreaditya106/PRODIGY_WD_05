@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        #weather-app {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #weather-info {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="weather-app">
+        <input type="text" id="location" placeholder="Enter Location">
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="weather-info"></div>
+    </div>
+
+    <script>
+        async function getWeather() {
+            const location = document.getElementById('location').value;
+            const apiKey = '6e015f3aa3b549178c570953242008';
+            const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=no`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                document.getElementById('weather-info').innerHTML = `
+                    <p>Location: ${data.location.name}, ${data.location.region}</p>
+                    <p>Temperature: ${data.current.temp_c}°C</p>
+                    <p>Weather: ${data.current.condition.text}</p>
+                    <p>Humidity: ${data.current.humidity}%</p>
+                    <p>Wind Speed: ${data.current.wind_kph} kph</p>
+                `;
+            } catch (error) {
+                document.getElementById('weather-info').innerHTML = `<p>Could not fetch weather data. Please try again.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
